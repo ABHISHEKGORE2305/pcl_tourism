@@ -332,25 +332,185 @@ const SubmitButton = styled(motion.button)`
   }
 `;
 
+const LoadMoreButton = styled(motion.button)`
+  display: block;
+  margin: 3rem auto;
+  padding: 1rem 2rem;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px var(--shadow-color);
+
+  &:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    background: var(--text-secondary);
+    cursor: not-allowed;
+    transform: none;
+  }
+`;
+
+const SidebarToggle = styled(motion.button)`
+  position: fixed;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1002;
+  box-shadow: 0 2px 10px var(--shadow-color);
+
+  &:hover {
+    background: var(--accent-hover);
+  }
+
+  @media (max-width: 1200px) {
+    display: none;
+  }
+`;
+
+const FilterSection = styled(motion.div)`
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  background: var(--card-bg);
+  padding: 2rem 1.5rem;
+  width: 280px;
+  box-shadow: 0 4px 15px var(--shadow-color);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1001;
+  overflow-y: auto;
+  transform: translateX(${props => props.isOpen ? '0' : '-100%'});
+  transition: transform 0.3s ease;
+
+  @media (max-width: 1200px) {
+    position: static;
+    transform: none;
+    width: 100%;
+    height: auto;
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+    border-radius: 15px;
+    z-index: 1;
+  }
+`;
+
+const FilterHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+`;
+
+const FilterTitle = styled.h3`
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  margin: 0;
+`;
+
+const FilterGroup = styled.div`
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+`;
+
+const RangeInput = styled.input`
+  width: 100%;
+  padding: 0.4rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  margin-top: 0.5rem;
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent-color);
+  }
+`;
+
+const RangeLabel = styled.label`
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.5rem;
+`;
+
+const RangeValue = styled.span`
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 0.3rem;
+`;
+
+const ResetButton = styled(motion.button)`
+  width: 100%;
+  padding: 0.7rem;
+  background: var(--text-secondary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+
+  &:hover {
+    background: var(--text-primary);
+  }
+`;
+
+const MainContent = styled.div`
+  margin-left: ${props => props.isOpen ? '280px' : '0'};
+  padding: 0 2rem;
+  transition: margin-left 0.3s ease;
+
+  @media (max-width: 1200px) {
+    margin-left: 0;
+  }
+`;
+
 const Destinations = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [visibleDestinations, setVisibleDestinations] = useState(6);
   const [selectedDestination, setSelectedDestination] = useState(null);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 3000 });
+  const [durationRange, setDurationRange] = useState({ min: 1, max: 14 });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [bookingData, setBookingData] = useState({
     name: '',
     email: '',
     phone: '',
     date: '',
     guests: '1',
-    specialRequests: '',
+    specialRequests: ''
   });
-
-  const categories = [
-    { id: 'all', name: 'All Destinations' },
-    { id: 'beach', name: 'Beach' },
-    { id: 'mountain', name: 'Mountain' },
-    { id: 'city', name: 'City' },
-    { id: 'cultural', name: 'Cultural' },
-  ];
 
   const destinations = [
     {
@@ -358,54 +518,115 @@ const Destinations = () => {
       title: 'Bali Paradise',
       description: 'Experience the perfect blend of culture and natural beauty in this tropical paradise.',
       image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4',
-      price: '$1,299',
       category: 'beach',
+      price: '$1,299'
     },
     {
       id: 2,
       title: 'Swiss Alps',
       description: 'Discover the majestic beauty of the Swiss mountains and enjoy world-class skiing.',
       image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b',
-      price: '$1,899',
       category: 'mountain',
+      price: '$1,899'
     },
     {
       id: 3,
-      title: 'Tokyo Adventure',
-      description: 'Immerse yourself in the vibrant culture and modern technology of Japan\'s capital.',
-      image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf',
-      price: '$2,199',
-      category: 'city',
+      title: 'Santorini Sunset',
+      description: 'Witness the most beautiful sunsets in Greece from your private villa.',
+      image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff',
+      category: 'beach',
+      price: '$1,599'
     },
     {
       id: 4,
-      title: 'Santorini Sunset',
-      description: 'Witness the most beautiful sunsets in Greece from this iconic island.',
-      image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff',
-      price: '$1,599',
-      category: 'beach',
+      title: 'Kyoto Temples',
+      description: 'Immerse yourself in Japanese culture and visit ancient temples.',
+      image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e',
+      category: 'cultural',
+      price: '$1,799'
     },
     {
       id: 5,
-      title: 'Kyoto Temples',
-      description: 'Explore ancient temples and traditional Japanese culture in this historic city.',
-      image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e',
-      price: '$1,799',
-      category: 'cultural',
+      title: 'Safari Adventure',
+      description: 'Experience the thrill of African wildlife in their natural habitat.',
+      image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801',
+      category: 'adventure',
+      price: '$2,499'
     },
     {
       id: 6,
-      title: 'New York City',
-      description: 'Experience the energy of the city that never sleeps.',
-      image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9',
-      price: '$1,999',
+      title: 'Paris Getaway',
+      description: 'Explore the city of love and its iconic landmarks.',
+      image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34',
       category: 'city',
+      price: '$1,499'
     },
+    {
+      id: 7,
+      title: 'Great Barrier Reef',
+      description: 'Dive into the world\'s largest coral reef system.',
+      image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509',
+      category: 'beach',
+      price: '$1,999'
+    },
+    {
+      id: 8,
+      title: 'Machu Picchu',
+      description: 'Discover the ancient Incan citadel in the Andes Mountains.',
+      image: 'https://images.unsplash.com/photo-1526392060635-9d6019884377',
+      category: 'adventure',
+      price: '$1,799'
+    },
+    {
+      id: 9,
+      title: 'Venice Canals',
+      description: 'Experience the romantic charm of Italy\'s floating city.',
+      image: 'https://images.unsplash.com/photo-1534113416831-349d2a9e6a60',
+      category: 'cultural',
+      price: '$1,699'
+    }
   ];
 
-  const filteredDestinations = selectedCategory === 'all'
-    ? destinations
-    : destinations.filter(dest => dest.category === selectedCategory);
+  const handlePriceChange = (e, type) => {
+    const value = parseInt(e.target.value);
+    setPriceRange(prev => ({
+      ...prev,
+      [type]: value
+    }));
+  };
+
+  const handleDurationChange = (e, type) => {
+    const value = parseInt(e.target.value);
+    setDurationRange(prev => ({
+      ...prev,
+      [type]: value
+    }));
+  };
+
+  const resetFilters = () => {
+    setActiveFilter('all');
+    setPriceRange({ min: 0, max: 3000 });
+    setDurationRange({ min: 1, max: 14 });
+    setVisibleDestinations(6);
+  };
+
+  const filteredDestinations = destinations
+    .filter(dest => activeFilter === 'all' || dest.category === activeFilter)
+    .filter(dest => {
+      const price = parseInt(dest.price.replace('$', '').replace(',', ''));
+      return price >= priceRange.min && price <= priceRange.max;
+    });
+
+  const visibleItems = filteredDestinations.slice(0, visibleDestinations);
+
+  const handleLoadMore = () => {
+    setVisibleDestinations(prev => prev + 3);
+  };
+
+  const handleFilterClick = (filter) => {
+    setActiveFilter(filter);
+    setVisibleDestinations(6);
+  };
 
   const handleBookingClick = (destination) => {
     setSelectedDestination(destination);
@@ -438,57 +659,171 @@ const Destinations = () => {
     handleCloseModal();
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <DestinationsContainer>
       <ScrollAnimation animation="fadeUp">
-        <PageTitle>Explore Our Destinations</PageTitle>
+        <PageTitle>Explore Destinations</PageTitle>
       </ScrollAnimation>
 
-      <FilterContainer>
-        {categories.map((category) => (
-          <FilterButton
-            key={category.id}
-            active={selectedCategory === category.id}
-            onClick={() => setSelectedCategory(category.id)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {category.name}
-          </FilterButton>
-        ))}
-      </FilterContainer>
+      <SidebarToggle
+        onClick={toggleSidebar}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        {isSidebarOpen ? '←' : '→'}
+      </SidebarToggle>
 
-      <DestinationsGrid>
-        <AnimatePresence mode="wait">
-          {filteredDestinations.map((destination) => (
+      <FilterSection isOpen={isSidebarOpen}>
+        <FilterHeader>
+          <FilterTitle>Filters</FilterTitle>
+          <CloseButton onClick={toggleSidebar}>×</CloseButton>
+        </FilterHeader>
+
+        <FilterGroup>
+          <RangeLabel>Price Range</RangeLabel>
+          <RangeInput
+            type="range"
+            min="0"
+            max="3000"
+            value={priceRange.min}
+            onChange={(e) => handlePriceChange(e, 'min')}
+          />
+          <RangeValue>Min: ${priceRange.min}</RangeValue>
+          <RangeInput
+            type="range"
+            min="0"
+            max="3000"
+            value={priceRange.max}
+            onChange={(e) => handlePriceChange(e, 'max')}
+          />
+          <RangeValue>Max: ${priceRange.max}</RangeValue>
+        </FilterGroup>
+
+        <FilterGroup>
+          <RangeLabel>Duration (days)</RangeLabel>
+          <RangeInput
+            type="range"
+            min="1"
+            max="14"
+            value={durationRange.min}
+            onChange={(e) => handleDurationChange(e, 'min')}
+          />
+          <RangeValue>Min: {durationRange.min} days</RangeValue>
+          <RangeInput
+            type="range"
+            min="1"
+            max="14"
+            value={durationRange.max}
+            onChange={(e) => handleDurationChange(e, 'max')}
+          />
+          <RangeValue>Max: {durationRange.max} days</RangeValue>
+        </FilterGroup>
+
+        <FilterGroup>
+          <RangeLabel>Categories</RangeLabel>
+          <FilterContainer>
+            <FilterButton
+              active={activeFilter === 'all'}
+              onClick={() => handleFilterClick('all')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              All
+            </FilterButton>
+            <FilterButton
+              active={activeFilter === 'beach'}
+              onClick={() => handleFilterClick('beach')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Beach
+            </FilterButton>
+            <FilterButton
+              active={activeFilter === 'mountain'}
+              onClick={() => handleFilterClick('mountain')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Mountain
+            </FilterButton>
+            <FilterButton
+              active={activeFilter === 'cultural'}
+              onClick={() => handleFilterClick('cultural')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Cultural
+            </FilterButton>
+            <FilterButton
+              active={activeFilter === 'adventure'}
+              onClick={() => handleFilterClick('adventure')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Adventure
+            </FilterButton>
+            <FilterButton
+              active={activeFilter === 'city'}
+              onClick={() => handleFilterClick('city')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              City
+            </FilterButton>
+          </FilterContainer>
+        </FilterGroup>
+
+        <ResetButton
+          onClick={resetFilters}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Reset All Filters
+        </ResetButton>
+      </FilterSection>
+
+      <MainContent isOpen={isSidebarOpen}>
+        <DestinationsGrid>
+          {visibleItems.map((destination) => (
             <ScrollAnimation key={destination.id} animation="fadeUp">
-              <DestinationCard
-                whileHover={{ y: -10 }}
-                transition={{ duration: 0.3 }}
-              >
+              <DestinationCard whileHover={{ y: -10 }} transition={{ duration: 0.3 }}>
                 <CardImage>
                   <img src={destination.image} alt={destination.title} />
-                  <CategoryBadge>
-                    {categories.find(cat => cat.id === destination.category)?.name}
-                  </CategoryBadge>
+                  <CategoryBadge>{destination.category}</CategoryBadge>
                 </CardImage>
                 <CardContent>
                   <CardTitle>{destination.title}</CardTitle>
                   <CardDescription>{destination.description}</CardDescription>
                   <Price>From {destination.price}</Price>
-                  <BookNowButton
-                    onClick={() => handleBookingClick(destination)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                  <CardButton
+                    to="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleBookingClick(destination);
+                    }}
                   >
                     Book Now
-                  </BookNowButton>
+                  </CardButton>
                 </CardContent>
               </DestinationCard>
             </ScrollAnimation>
           ))}
-        </AnimatePresence>
-      </DestinationsGrid>
+        </DestinationsGrid>
+
+        {visibleDestinations < filteredDestinations.length && (
+          <LoadMoreButton
+            onClick={handleLoadMore}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Load More
+          </LoadMoreButton>
+        )}
+      </MainContent>
 
       <AnimatePresence>
         {selectedDestination && (

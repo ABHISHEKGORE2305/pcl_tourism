@@ -285,8 +285,8 @@ const About = () => {
     {
       id: 1,
       name: 'Abhishek Gore',
-      role: 'Lead Developer',
-      bio: 'With over 20 years of experience in the industry, Abhishek leads our team with passion and expertise.',
+      role: 'Developer',
+      bio: 'Abhishek is the developer of the company and ensures that the company is run smoothly.',
       image: 'images/abhi.jpg',
     },
     {
@@ -299,8 +299,8 @@ const About = () => {
     {
       id: 3,
       name: 'Aditya Katepallewar',
-      role: 'Useless fellow',
-      bio: 'Does nothing',
+      role: 'CEO',
+      bio: 'Aditya is the CEO of the company and ensures that the company is run smoothly.',
       image: 'images/adi.jpg',
     },
   ];

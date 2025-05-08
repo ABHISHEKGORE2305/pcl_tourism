@@ -178,6 +178,7 @@ const Navbar = () => {
           <NavLink to="/destinations" isScrolled={isScrolled}>Destinations</NavLink>
           <NavLink to="/about" isScrolled={isScrolled}>About</NavLink>
           <NavLink to="/contact" isScrolled={isScrolled}>Contact</NavLink>
+          <NavLink to="/profile" isScrolled={isScrolled}>Profile</NavLink>
           <ThemeToggleButton
             onClick={toggleTheme}
             whileHover={{ scale: 1.1 }}
@@ -206,40 +207,20 @@ const Navbar = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <MobileNavLink
-              to="/"
-              whileHover={{ x: 10 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Home
-            </MobileNavLink>
-            <MobileNavLink
-              to="/destinations"
-              whileHover={{ x: 10 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Destinations
-            </MobileNavLink>
-            <MobileNavLink
-              to="/about"
-              whileHover={{ x: 10 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              About
-            </MobileNavLink>
-            <MobileNavLink
-              to="/contact"
-              whileHover={{ x: 10 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Contact
-            </MobileNavLink>
+            <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink>
+            <MobileNavLink to="/destinations" onClick={() => setIsOpen(false)}>Destinations</MobileNavLink>
+            <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About</MobileNavLink>
+            <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Contact</MobileNavLink>
+            <MobileNavLink to="/profile" onClick={() => setIsOpen(false)}>Profile</MobileNavLink>
             <ThemeToggleButton
-              onClick={toggleTheme}
+              onClick={() => {
+                toggleTheme();
+                setIsOpen(false);
+              }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
-              {isDarkMode ? '🌞' : '🌙'}
+              {isDarkMode ? '☀️' : '🌙'}
             </ThemeToggleButton>
           </MobileMenu>
         )}

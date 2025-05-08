@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Destinations from './pages/Destinations';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Profile from './pages/Profile';
 
 const AppContainer = styled.div`
   font-family: 'Poppins', sans-serif;
@@ -24,6 +25,7 @@ function App() {
             <Route path="/destinations" element={<Destinations />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </AppContainer>
       </Router>
