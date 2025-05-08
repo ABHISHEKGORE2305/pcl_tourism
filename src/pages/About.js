@@ -308,7 +308,7 @@ const About = () => {
   const stats = [
     {
       id: 1,
-      number: 10000,
+      number: 20000,
       label: 'Happy Travelers',
       icon: '👥',
       suffix: '+',
