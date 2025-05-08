@@ -286,7 +286,7 @@ const About = () => {
       id: 1,
       name: 'Abhishek Gore',
       role: 'Developer',
-      bio: 'Abhishek is the developer of the company and ensures that the company is run smoothly.',
+      bio: 'Abhishek is the developer of the company and ensures that the company is run smoothly .',
       image: 'images/abhi.jpg',
     },
     {
