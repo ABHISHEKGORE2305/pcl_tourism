@@ -43,30 +43,6 @@ const FilterButton = styled(motion.button)`
     color: white;
     transform: translateY(-2px);
   }
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const MobileFilterButton = styled(motion.button)`
-  display: none;
-  padding: 0.8rem 1.5rem;
-  border: none;
-  border-radius: 25px;
-  background: var(--accent-color);
-  color: white;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px var(--shadow-color);
-  margin: 1rem auto;
-  width: 90%;
-  max-width: 300px;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
 `;
 
 const DestinationsGrid = styled.div`
@@ -404,117 +380,148 @@ const SidebarToggle = styled(motion.button)`
   }
 
   @media (max-width: 1200px) {
-    display: none;
+    display: flex;
+  }
+
+  @media (max-width: 480px) {
+    width: 35px;
+    height: 35px;
+    left: 0.5rem;
   }
 `;
 
-const FilterPanel = styled(motion.div)`
+const FilterSection = styled(motion.div)`
   position: fixed;
-  top: 0;
   left: 0;
-  width: 280px;
+  top: 0;
   height: 100vh;
   background: var(--card-bg);
-  padding: 2rem;
-  box-shadow: 2px 0 10px var(--shadow-color);
+  padding: 2rem 1.5rem;
+  width: 280px;
+  box-shadow: 0 4px 15px var(--shadow-color);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 1001;
   overflow-y: auto;
   transform: translateX(${props => props.isOpen ? '0' : '-100%'});
   transition: transform 0.3s ease;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
+    position: fixed;
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
+    transform: translateX(${props => props.isOpen ? '0' : '-100%'});
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   }
-`;
 
-const FilterOverlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: ${props => props.isOpen ? 'block' : 'none'};
+  @media (max-width: 480px) {
+    width: 100%;
+    max-width: none;
+    padding: 1.5rem 1rem;
+  }
 `;
 
 const FilterHeader = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+
+  @media (max-width: 480px) {
+    margin-bottom: 1.5rem;
+  }
 `;
 
 const FilterTitle = styled.h3`
   color: var(--text-primary);
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin: 0;
-`;
 
-const CloseFilterButton = styled.button`
-  background: none;
-  border: none;
-  color: var(--text-primary);
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: var(--bg-secondary);
+  @media (max-width: 480px) {
+    font-size: 1.1rem;
   }
 `;
 
 const FilterGroup = styled.div`
-  margin-bottom: 2rem;
-`;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
 
-const FilterLabel = styled.label`
-  display: block;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-  font-weight: 500;
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
 `;
 
 const RangeInput = styled.input`
   width: 100%;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
+  padding: 0.4rem;
   border: 1px solid var(--border-color);
-  border-radius: 5px;
-  background: var(--bg-secondary);
+  border-radius: 8px;
+  background: var(--bg-primary);
   color: var(--text-primary);
+  margin-top: 0.5rem;
 
   &:focus {
     outline: none;
     border-color: var(--accent-color);
   }
+
+  @media (max-width: 480px) {
+    padding: 0.3rem;
+  }
+`;
+
+const RangeLabel = styled.label`
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.5rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+  }
 `;
 
 const RangeValue = styled.span`
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 0.3rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const ResetButton = styled(motion.button)`
   width: 100%;
-  padding: 0.8rem;
-  background: var(--accent-color);
+  padding: 0.7rem;
+  background: var(--text-secondary);
   color: white;
   border: none;
-  border-radius: 25px;
+  border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 1rem;
+  font-size: 0.9rem;
 
   &:hover {
-    background: var(--accent-hover);
+    background: var(--text-primary);
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.6rem;
+    font-size: 0.85rem;
   }
 `;
 
@@ -525,6 +532,11 @@ const MainContent = styled.div`
 
   @media (max-width: 1200px) {
     margin-left: 0;
+    padding: 0 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 0.5rem;
   }
 `;
 
@@ -543,7 +555,6 @@ const Destinations = () => {
     guests: '1',
     specialRequests: ''
   });
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const destinations = [
     {
@@ -696,10 +707,6 @@ const Destinations = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const toggleFilter = () => {
-    setIsFilterOpen(!isFilterOpen);
-  };
-
   return (
     <DestinationsContainer>
       <ScrollAnimation animation="fadeUp">
@@ -714,28 +721,18 @@ const Destinations = () => {
         {isSidebarOpen ? '←' : '→'}
       </SidebarToggle>
 
-      <MobileFilterButton
-        onClick={toggleFilter}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        Filter Destinations
-      </MobileFilterButton>
-
-      <FilterOverlay isOpen={isFilterOpen} onClick={toggleFilter} />
-
-      <FilterPanel isOpen={isFilterOpen}>
+      <FilterSection isOpen={isSidebarOpen}>
         <FilterHeader>
           <FilterTitle>Filters</FilterTitle>
-          <CloseFilterButton onClick={toggleFilter}>✕</CloseFilterButton>
+          <CloseButton onClick={toggleSidebar}>×</CloseButton>
         </FilterHeader>
 
         <FilterGroup>
-          <FilterLabel>Price Range</FilterLabel>
+          <RangeLabel>Price Range</RangeLabel>
           <RangeInput
             type="range"
             min="0"
-            max="5000"
+            max="3000"
             value={priceRange.min}
             onChange={(e) => handlePriceChange(e, 'min')}
           />
@@ -743,7 +740,7 @@ const Destinations = () => {
           <RangeInput
             type="range"
             min="0"
-            max="5000"
+            max="3000"
             value={priceRange.max}
             onChange={(e) => handlePriceChange(e, 'max')}
           />
@@ -751,11 +748,11 @@ const Destinations = () => {
         </FilterGroup>
 
         <FilterGroup>
-          <FilterLabel>Duration (days)</FilterLabel>
+          <RangeLabel>Duration (days)</RangeLabel>
           <RangeInput
             type="range"
             min="1"
-            max="30"
+            max="14"
             value={durationRange.min}
             onChange={(e) => handleDurationChange(e, 'min')}
           />
@@ -763,7 +760,7 @@ const Destinations = () => {
           <RangeInput
             type="range"
             min="1"
-            max="30"
+            max="14"
             value={durationRange.max}
             onChange={(e) => handleDurationChange(e, 'max')}
           />
@@ -771,28 +768,67 @@ const Destinations = () => {
         </FilterGroup>
 
         <FilterGroup>
-          <FilterLabel>Categories</FilterLabel>
-          {['All', 'Beach', 'Mountain', 'City', 'Adventure'].map((category) => (
+          <RangeLabel>Categories</RangeLabel>
+          <FilterContainer>
             <FilterButton
-              key={category}
-              active={activeFilter === category}
-              onClick={() => handleFilterClick(category)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              active={activeFilter === 'all'}
+              onClick={() => handleFilterClick('all')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {category}
+              All
             </FilterButton>
-          ))}
+            <FilterButton
+              active={activeFilter === 'beach'}
+              onClick={() => handleFilterClick('beach')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Beach
+            </FilterButton>
+            <FilterButton
+              active={activeFilter === 'mountain'}
+              onClick={() => handleFilterClick('mountain')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Mountain
+            </FilterButton>
+            <FilterButton
+              active={activeFilter === 'cultural'}
+              onClick={() => handleFilterClick('cultural')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Cultural
+            </FilterButton>
+            <FilterButton
+              active={activeFilter === 'adventure'}
+              onClick={() => handleFilterClick('adventure')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Adventure
+            </FilterButton>
+            <FilterButton
+              active={activeFilter === 'city'}
+              onClick={() => handleFilterClick('city')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              City
+            </FilterButton>
+          </FilterContainer>
         </FilterGroup>
 
         <ResetButton
           onClick={resetFilters}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          Reset Filters
+          Reset All Filters
         </ResetButton>
-      </FilterPanel>
+      </FilterSection>
 
       <MainContent isOpen={isSidebarOpen}>
         <DestinationsGrid>

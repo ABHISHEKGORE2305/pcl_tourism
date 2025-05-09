@@ -14,6 +14,10 @@ const Nav = styled(motion.nav)`
   backdrop-filter: ${props => props.isScrolled ? 'blur(10px)' : 'none'};
   box-shadow: ${props => props.isScrolled ? '0 2px 10px var(--shadow-color)' : 'none'};
   transition: all 0.3s ease;
+  transform: translateY(${props => props.isVisible ? '0' : '-100%'});
+  overflow: hidden;
+  height: ${props => props.isVisible ? 'auto' : '0'};
+  opacity: ${props => props.isVisible ? '1' : '0'};
 `;
 
 const NavContainer = styled.div`
@@ -23,6 +27,8 @@ const NavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: all 0.3s ease;
+  transform: translateY(${props => props.isVisible ? '0' : '-100%'});
 `;
 
 const Logo = styled(motion(Link))`
@@ -125,6 +131,27 @@ const MobileMenu = styled(motion.div)`
   }
 `;
 
+const CloseButton = styled(motion.button)`
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: var(--accent-color);
+    transform: scale(1.1);
+  }
+`;
+
 const MobileNavLink = styled(motion(Link))`
   color: var(--text-primary);
   text-decoration: none;
@@ -140,17 +167,29 @@ const MobileNavLink = styled(motion(Link))`
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
   const { isDarkMode, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 50);
+      
+      // Hide navbar as soon as user starts scrolling
+      if (currentScrollY > 0) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   useEffect(() => {
     setIsOpen(false);
@@ -162,8 +201,9 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       isScrolled={isScrolled}
+      isVisible={isVisible}
     >
-      <NavContainer>
+      <NavContainer isVisible={isVisible}>
         <Logo
           to="/"
           whileHover={{ scale: 1.05 }}
@@ -178,6 +218,7 @@ const Navbar = () => {
           <NavLink to="/destinations" isScrolled={isScrolled}>Destinations</NavLink>
           <NavLink to="/about" isScrolled={isScrolled}>About</NavLink>
           <NavLink to="/contact" isScrolled={isScrolled}>Contact</NavLink>
+          <NavLink to="/community" isScrolled={isScrolled}>Community</NavLink>
           <NavLink to="/profile" isScrolled={isScrolled}>Profile</NavLink>
           <ThemeToggleButton
             onClick={toggleTheme}
@@ -207,10 +248,18 @@ const Navbar = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
+            <CloseButton
+              onClick={() => setIsOpen(false)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              ✕
+            </CloseButton>
             <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink>
             <MobileNavLink to="/destinations" onClick={() => setIsOpen(false)}>Destinations</MobileNavLink>
             <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About</MobileNavLink>
             <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Contact</MobileNavLink>
+            <MobileNavLink to="/community" onClick={() => setIsOpen(false)}>Community</MobileNavLink>
             <MobileNavLink to="/profile" onClick={() => setIsOpen(false)}>Profile</MobileNavLink>
             <ThemeToggleButton
               onClick={() => {
